@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+
+<title>Async Clipboard API: writeText()</title>
+
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" href="_style.css">
+
+<body>
+
+<h1>Async Clipboard API: writeText()</h1>
+
+<div class="vstack">
+	<label>
+		Text:<br>
+		<textarea id="inputText" rows="5" columns="20"></textarea>
+	</label>
+	<div>
+		Data: <span id="messageView"></span><br>
+		<pre id="dataView"></pre>
+	</div>
+	<div class="hstack">
+		<button type="button" id="buttonCopy">Copy</button>
+		<button type="button" id="buttonClear">Clear textarea</button>
+	</div>
+</div>
+
+<footer>
+	<p><a href="/">Home</a></p>
+</footer>
+
+<script>
+
+const inputText = document.querySelector('#inputText');
+const buttonCopy = document.querySelector('#buttonCopy');
+const buttonClear = document.querySelector('#buttonClear');
+
+const message = document.querySelector('#messageView');
+const dataView = document.querySelector('#dataView');
+
+const store = {
+	data: null,
+	error: false,
+	message: '',
+};
+
+function updateView() {
+	dataView.textContent = store.data;
+
+	messageView.textContent = store.message;
+	messageView.classList.toggle('error', store.error);
+}
+
+buttonClear.addEventListener('click', (event) => {
+	inputText.value = '';
+
+	store.data = null;
+	store.error = false;
+	store.message = '';
+
+	updateView();
+});
+
+buttonCopy.addEventListener('click', (event) => {
+	const text = inputText.value;
+
+	navigator.clipboard.writeText(text).then(() => {
+
+		store.data = text;
+		store.error = false;
+		store.message = 'text copied to clipboard.';
+
+		console.log(store.message, text);
+
+	}).catch((error) => {
+
+		store.data = null;
+		store.error = true;
+		store.message = 'copy failed.';
+
+		console.error(store.message, error);
+
+	}).finally(() => {
+
+		updateView();
+
+	});
+});
+
+</script>

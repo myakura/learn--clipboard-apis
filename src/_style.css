@@ -1,0 +1,22 @@
+.vstack, .hstack {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 2em 0.5em;
+}
+.hstack {
+	flex-direction: row;
+}
+.vstack {
+	flex-direction: column;
+}
+
+#dataView {
+	border: 1px solid #ccc;
+	background: #eee;
+	margin: 0;
+	padding: 0.5em;
+}
+
+#messageView.error {
+	color: #c00;
+}
