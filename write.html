@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+
+<title>Async Clipboard API: write()</title>
+
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" href="_style.css">
+
+<body>
+
+<h1>Async Clipboard API: write()</h1>
+
+<div class="vstack">
+	<label>
+		Text:<br>
+		<textarea id="textarea" rows="5" columns="20"></textarea>
+	</label>
+	<div>
+		Image:<br>
+		<img id="image" alt="">
+	</div>
+	<div>
+		Data: <span id="messageView"></span><br>
+		<pre id="dataView"></pre>
+	</div>
+	<div class="hstack">
+		<button type="button" id="buttonCopyText">Copy text</button>
+		<button type="button" id="buttonCopyImage">Copy image</button>
+		<button type="button" id="buttonClear">Clear text</button>
+	</div>
+</div>
+
+<footer>
+	<p><a href="/">Home</a></p>
+</footer>
+
+<script>
+
+const IMAGE_DATA = 'data:image/png;base64,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';
+
+const textarea = document.querySelector('#textarea');
+const image = document.querySelector('#image');
+
+const buttonCopyText = document.querySelector('#buttonCopyText');
+const buttonCopyImage = document.querySelector('#buttonCopyImage');
+const buttonClear = document.querySelector('#buttonClear');
+
+const message = document.querySelector('#messageView');
+const dataView = document.querySelector('#dataView');
+
+const state = {
+	data: null,
+	error: false,
+	message: '',
+};
+
+image.src = IMAGE_DATA;
+image.width = 192;
+image.height = 192;
+
+function updateView() {
+	dataView.textContent = state.data;
+
+	messageView.textContent = state.message;
+	messageView.classList.toggle('error', state.error);
+}
+
+buttonClear.addEventListener('click', (event) => {
+	textarea.value = '';
+
+	state.data = null;
+	state.error = false;
+	state.message = '';
+
+	updateView();
+});
+
+buttonCopyText.addEventListener('click', (event) => {
+	const text = textarea.value;
+	const textBlob = new Blob([window.atob(text)], { type: 'text/plain' });
+
+	const items = [
+		new ClipboardItem({
+			'text/plain': Promise.resolve(textBlob),
+		})
+	]
+
+	navigator.clipboard.write(items).then(() => {
+
+		state.data = text;
+		state.error = false;
+		state.message = 'text copied to clipboard.';
+
+		console.log(state.message, text);
+
+	}).catch((error) => {
+
+		state.data = null;
+		state.error = true;
+		state.message = 'copy failed.';
+
+		console.error(state.message, error);
+
+	}).finally(() => {
+
+		updateView();
+
+	});
+});
+
+buttonCopyImage.addEventListener('click', async (event) => {
+	const imageBlob = fetch(IMAGE_DATA).then(res => res.blob());
+
+	const items = [
+		new ClipboardItem({
+			'image/png': Promise.resolve(imageBlob),
+		})
+	];
+
+	navigator.clipboard.write(items).then(() => {
+
+		state.data = 'IMAGE DATA';
+		state.error = false;
+		state.message = 'image copied to clipboard.';
+
+		console.log(state.message, items);
+
+		return items[0].getType('image/png');
+
+	}).then((data) => {
+
+		console.log(data);
+
+	}).catch((error) => {
+
+		state.data = '';
+		state.error = true;
+		state.message = 'copy failed.';
+
+		console.error(state.message, error);
+
+	}).finally(() => {
+
+		updateView();
+
+	});
+});
+
+</script>
