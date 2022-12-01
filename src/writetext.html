@@ -13,7 +13,7 @@
 <div class="vstack">
 	<label>
 		Text:<br>
-		<textarea id="inputText" rows="5" columns="20"></textarea>
+		<textarea id="textarea" rows="5" columns="20"></textarea>
 	</label>
 	<div>
 		Data: <span id="messageView"></span><br>
@@ -31,7 +31,7 @@
 
 <script>
 
-const inputText = document.querySelector('#inputText');
+const textarea = document.querySelector('#textarea');
 const buttonCopy = document.querySelector('#buttonCopy');
 const buttonClear = document.querySelector('#buttonClear');
 
@@ -52,7 +52,7 @@ function updateView() {
 }
 
 buttonClear.addEventListener('click', (event) => {
-	inputText.value = '';
+	textarea.value = '';
 
 	state.data = null;
 	state.error = false;
@@ -62,7 +62,7 @@ buttonClear.addEventListener('click', (event) => {
 });
 
 buttonCopy.addEventListener('click', (event) => {
-	const text = inputText.value;
+	const text = textarea.value;
 
 	navigator.clipboard.writeText(text).then(() => {
 
