@@ -36,25 +36,25 @@ const buttonClear = document.querySelector('#buttonClear');
 const message = document.querySelector('#messageView');
 const dataView = document.querySelector('#dataView');
 
-const store = {
+const state = {
 	data: null,
 	error: false,
 	message: '',
 };
 
 function updateView() {
-	dataView.textContent = store.data;
+	dataView.textContent = state.data;
 
-	messageView.textContent = store.message;
-	messageView.classList.toggle('error', store.error);
+	messageView.textContent = state.message;
+	messageView.classList.toggle('error', state.error);
 }
 
 buttonClear.addEventListener('click', (event) => {
 	inputText.value = '';
 
-	store.data = null;
-	store.error = false;
-	store.message = '';
+	state.data = null;
+	state.error = false;
+	state.message = '';
 
 	updateView();
 });
@@ -64,19 +64,19 @@ buttonCopy.addEventListener('click', (event) => {
 
 	navigator.clipboard.writeText(text).then(() => {
 
-		store.data = text;
-		store.error = false;
-		store.message = 'text copied to clipboard.';
+		state.data = text;
+		state.error = false;
+		state.message = 'text copied to clipboard.';
 
-		console.log(store.message, text);
+		console.log(state.message, text);
 
 	}).catch((error) => {
 
-		store.data = null;
-		store.error = true;
-		store.message = 'copy failed.';
+		state.data = null;
+		state.error = true;
+		state.message = 'copy failed.';
 
-		console.error(store.message, error);
+		console.error(state.message, error);
 
 	}).finally(() => {
 
@@ -88,19 +88,19 @@ buttonCopy.addEventListener('click', (event) => {
 buttonPaste.addEventListener('click', (event) => {
 	navigator.clipboard.readText().then((text) => {
 
-		store.data = text;
-		store.error = false;
-		store.message = 'text read from clipboard.';
+		state.data = text;
+		state.error = false;
+		state.message = 'text read from clipboard.';
 
-		console.log(store.message, text);
+		console.log(state.message, text);
 
 	}).catch((error) => {
 
-		store.data = null;
-		store.error = true;
-		store.message = 'paste failed.';
+		state.data = null;
+		state.error = true;
+		state.message = 'paste failed.';
 
-		console.error(store.message, error);
+		console.error(state.message, error);
 
 	}).finally(() => {
 
