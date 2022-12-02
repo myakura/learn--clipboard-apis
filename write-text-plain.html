@@ -78,7 +78,11 @@ buttonCopy.addEventListener('click', (event) => {
 		state.error = false;
 		state.message = 'text copied to clipboard.';
 
-		console.log(state.message, text);
+		return items[0].getType('text/plain');
+
+	}).then((data) => {
+
+		console.log(data);
 
 	}).catch((error) => {
 
