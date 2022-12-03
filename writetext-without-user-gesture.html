@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+
+<title>Async Clipboard API: calling writeText() without user gesture</title>
+
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" href="_style.css">
+
+<body>
+
+<h1>Async Clipboard API: calling writeText() without user gesture</h1>
+
+<div class="vstack">
+	<div>
+		Data: <span id="messageView"></span><br>
+		<pre id="dataView"></pre>
+	</div>
+</div>
+
+<footer>
+	<p><a href="/">Home</a></p>
+</footer>
+
+<script>
+
+const message = document.querySelector('#messageView');
+const dataView = document.querySelector('#dataView');
+
+const state = {
+	data: null,
+	error: false,
+	message: '',
+};
+
+function updateView() {
+	dataView.textContent = state.data;
+
+	messageView.textContent = state.message;
+	messageView.classList.toggle('error', state.error);
+}
+
+const text = 'Hello world.';
+
+navigator.clipboard.writeText(text).then(() => {
+
+	state.data = text;
+	state.error = false;
+	state.message = 'text copied to clipboard.';
+
+console.log(state.message, text);
+
+})
+.catch((error) => {
+
+	state.data = null;
+	state.error = true;
+	state.message = 'copy failed.';
+
+	console.error(state.message, error);
+
+})
+.finally(() => {
+
+	updateView();
+
+});
+
+</script>
