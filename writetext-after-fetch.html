@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+
+<title>Async Clipboard API: writeText() to copy fetched data</title>
+
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" href="_style.css">
+
+<body>
+
+<h1>Async Clipboard API: writeText() to copy fetched data</h1>
+
+<div class="vstack">
+	<div>
+		Data: <span id="messageView"></span><br>
+		<pre id="dataView"></pre>
+	</div>
+	<div class="hstack">
+		<button type="button" id="buttonCopy">Copy</button>
+		<button type="button" id="buttonClear">Clear</button>
+	</div>
+</div>
+
+<footer>
+	<p><a href="/">Home</a></p>
+</footer>
+
+<script>
+
+const buttonCopy = document.querySelector('#buttonCopy');
+const buttonClear = document.querySelector('#buttonClear');
+
+const message = document.querySelector('#messageView');
+const dataView = document.querySelector('#dataView');
+
+const state = {
+	data: null,
+	error: false,
+	message: '',
+};
+
+function updateView() {
+	dataView.textContent = state.data;
+
+	messageView.textContent = state.message;
+	messageView.classList.toggle('error', state.error);
+}
+
+buttonClear.addEventListener('click', (event) => {
+
+	state.data = null;
+	state.error = false;
+	state.message = '';
+
+	updateView();
+});
+
+const textFileUrl = './_plaintext.txt';
+
+buttonCopy.addEventListener('click', (event) => {
+
+	fetch(textFileUrl).then((response) => {
+
+		if (!response.ok) {
+			throw new Error('fetch failed.');
+		}
+
+		return response.text();
+
+	}).then((responseText) => {
+
+		console.log('response:', responseText);
+
+		return navigator.clipboard.writeText(responseText);
+
+	}).then((text) => {
+
+		state.data = text;
+		state.error = false;
+		state.message = 'text copied to clipboard.';
+
+		console.log(state.message, text);
+
+	}).catch((error) => {
+
+		state.data = null;
+		state.error = true;
+		state.message = 'copy failed.';
+
+		console.error(state.message, error);
+
+	}).finally(() => {
+
+		updateView();
+
+	});
+});
+
+</script>
